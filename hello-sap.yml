@@ -4,9 +4,16 @@ resources:
   source:
     uri: https://github.com/teodor2000/SAP-task.git
 
+- name: time-trigger  # New time resource
+  type: time
+  source:
+    interval: 5m  
+
 jobs:
 - name: hello-sap-job
   plan:
+  - get: time-trigger  
+    trigger: true
   - get: repo
     trigger: true
   - task: run-python-script
