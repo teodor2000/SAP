@@ -1,0 +1,34 @@
+resources:
+- name: repo
+  type: git
+  source:
+    uri: https://github.com/teodor2000/SAP-task.git
+
+jobs:
+- name: hello-sap-job
+  plan:
+  - get: repo
+    trigger: true
+  - task: run-python-script
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: python
+          tag: slim
+      inputs:
+      - name: repo
+      run:
+        path: python3
+        args: ["repo/pythonFile.py"]
+  - task: hello-sap-task
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source:
+          repository: busybox
+      run:
+        path: echo
+        args: ["Hello SAP"]
